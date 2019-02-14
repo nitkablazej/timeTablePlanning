@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="body">
+
+        <ui:remove><!--Tytuł widoku--></ui:remove>
+        <h2>Panel generowania harmonogramu</h2>
+
+        <p:fieldset id="timeTableGeneratorFieldSet" legend="Generowanie grafiku" toggleable="true" toggleSpeed="500"
+                    styleClass="fieldset-center-none-background">
+
+            <h:form id="generateTimetableForm">
+                <h:panelGrid columns="2" cellpadding="5" cellspacing="5" styleClass="panelGrid">
+                    <ui:remove><!--Generuj na miesiąc--></ui:remove>
+                    <p:outputLabel for="generatedMonth"
+                                   value="Generuj na miesiąc:"/>
+                    <p:selectOneMenu id="generatedMonth"
+                                     effectSpeed="10"
+                                     value="#{timeTableGeneratePageService.selectedMonthToGenerate}"
+                                     style="width: 290px"
+                                     converter="generatedMonthConverter">
+                        <f:selectItems var="generatedMonth" itemLabel="#{generatedMonth.label}"
+                                       value="#{timeTableGeneratePageService.getAllAvailableMonths()}"
+                                       itemValue="#{generatedMonth}"/>
+                        <p:ajax update="workingFreeDay" listener="#{timeTableGeneratePageService.clearFreeDays()}"/>
+                    </p:selectOneMenu>
+
+                    <ui:remove><!--Weekendowe dni pracujące--></ui:remove>
+                    <p:outputLabel for="workingHoliday" value="Uwzględnij dni weekendowe:"/>
+                    <h:panelGrid columns="2">
+                        <p:selectBooleanCheckbox id="workingHoliday"
+                                                 value="#{timeTableGeneratePageService.workingHoliday}">
+                            <p:ajax update="workingHolidaySelect"
+                                    listener="#{timeTableGeneratePageService.workingHolidayMessage()}"/>
+                        </p:selectBooleanCheckbox>
+
+                        <p:selectOneRadio id="workingHolidaySelect"
+                                          required="true"
+                                          label="Weekendowe dni pracujące"
+                                          requiredMessage="Wymagane jest zaznaczenie jednego z dni weekendowych"
+                                          disabled="#{not timeTableGeneratePageService.workingHoliday}"
+                                          value="#{timeTableGeneratePageService.workingHolidayDayName}"
+                                          style="margin-left: 60px">
+                            <f:selectItem itemLabel="Sobota" itemValue="SATURDAY"/>
+                            <f:selectItem itemLabel="Niedziela" itemValue="SUNDAY"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+
+                    <ui:remove><!--Pracujące święta z listy--></ui:remove>
+                    <p:outputLabel for="workingFreeDay"
+                                   value="Pracujące święta w miesiącu:"/>
+                    <p:selectCheckboxMenu id="workingFreeDay"
+                                          multiple="true"
+                                          panelStyle="display: none"
+                                          value="#{timeTableGeneratePageService.selectedFreeDaysToWork}"
+                                          dynamic="true"
+                                          converter="freeDayConverter"
+                                          style="width: 320px;">
+                        <f:selectItems value="#{timeTableGeneratePageService.getAllFreeDaysForSelectedMonth()}"
+                                       var="freeDay" itemLabel="#{freeDay.label}"/>
+                    </p:selectCheckboxMenu>
+
+
+                    <ui:remove><!--Generowane etykiety pracowników (RODO)--></ui:remove>
+                    <p:outputLabel for="employeeIdentifiers"
+                                   value="Etykiety pracowników (RODO):"/>
+                    <p:selectOneRadio id="employeeIdentifiers"
+                                      value="#{timeTableGeneratePageService.employeeIdentifiers}">
+                        <f:selectItem itemLabel="Imię i nazwisko" itemValue="FIRST_AND_LAST_NAME"/>
+                        <f:selectItem itemLabel="Systemowy ID" itemValue="EMPLOYEE_ID"/>
+                    </p:selectOneRadio>
+
+                    <ui:remove><!--Zmiany w trakcie dnia--></ui:remove>
+                    <p:outputLabel for="dayChanges"
+                                   value="Zmiany w trakcie dnia:"/>
+                    <p:selectOneRadio id="dayChanges"
+                                      value="#{timeTableGeneratePageService.oneChangesOnDay}">
+                        <f:selectItem itemLabel="1" itemValue="true"/>
+                        <f:selectItem itemLabel="2" itemValue="false"/>
+                        <p:ajax event="click"
+                                update="startWorkTime"
+                                listener="#{timeTableGeneratePageService.setStartWorkMinAndMaxHour()}"/>
+                    </p:selectOneRadio>
+
+                    <ui:remove><!--Godzina rozpoczęcia pierwszej zmiany--></ui:remove>
+                    <p:outputLabel for="startWorkTime" value="Godzina rozpoczęcia 1. zmiany:"/>
+                    <p:calendar id="startWorkTime"
+                                minHour="#{timeTableGeneratePageService.startTimeMinHour}"
+                                maxHour="#{timeTableGeneratePageService.startTimeMaxHour}"
+                                required="true"
+                                requiredMessage="Wymagane jest uzupełnienie godziny pierwszej zmiany"
+                                inputStyleClass="inputFieldWidth"
+                                stepMinute="15"
+                                locale="pl"
+                                value="#{timeTableGeneratePageService.startWorkTime}"
+                                pattern="HH:mm"
+                                timeOnly="true"
+                    />
+                </h:panelGrid>
+
+                <p:messages id="messages" showIcon="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <ui:remove><!--Przycisk generujący harmonogram--></ui:remove>
+                <p:commandButton value="Generuj harmonogram"
+                                 styleClass="commandButton"
+                                 id="generateButton"
+                                 style="margin-top: 40px; font-family: Calibri, sans-serif; font-weight: bold;"
+                                 action="#{timeTableGeneratePageService.generateTimetable}"
+                                 update="generateTimetableForm">
+                </p:commandButton>
+
+                <h:panelGroup styleClass="panelGroup"
+                              id="panelDownloadFile"
+                              rendered="#{timeTableGeneratePageService.renderedTimeTableDownloadPanel}">
+                    <p:commandLink id="downloadFile"
+                                   ajax="false"
+                                   style="color: black;"
+                                   onclick="PrimeFaces.monitorDownload(null, stop)"
+                                   value="#{timeTableGeneratePageService.generatedTimeTableName}">
+                        <p:fileDownload value="#{timeTableGeneratePageService.generatedTimetableFile}"/>
+                    </p:commandLink>
+                </h:panelGroup>
+                <p:remoteCommand name="stop" update="@form"/>
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/resources/images/icons/loader.GIF"/>
+                </p:dialog>
+
+            </h:form>
+
+        </p:fieldset>
+
+    </ui:define>
+
+</ui:composition>

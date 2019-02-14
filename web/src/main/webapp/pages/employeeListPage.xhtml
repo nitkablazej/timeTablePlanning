@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="body">
+
+        <ui:remove><!--Tytuł widoku--></ui:remove>
+        <h2>Panel zarządzania pracownikami</h2>
+
+        <ui:remove><!--Okno potwierdzające usunięcie pracownika--></ui:remove>
+        <p:growl id="growlDelete" showDetail="true"/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no"/>
+            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes"/>
+        </p:confirmDialog>
+
+        <ui:remove><!--Karta z danymi nowego pracownika--></ui:remove>
+        <h:form id="newEmployeeForm">
+            <p:fieldset id="newEmployeeFieldset" legend="Dodaj nowego pracownika" toggleable="true" toggleSpeed="500"
+                        collapsed="true"
+                        styleClass="fieldset-center-none-background">
+                <h3>Podaj dane nowego pracownika:</h3>
+                <h:panelGrid columns="2" cellpadding="5" styleClass="panelGrid">
+
+                    <ui:remove><!--Imię--></ui:remove>
+                    <p:outputLabel for="firstName"
+                                   value="Imię:"/>
+                    <p:inputText id="firstName"
+                                 value="#{employeeListPageService.firstName}"
+                                 label="firstName"
+                                 required="true"
+                                 maxlength="100"
+                                 styleClass="inputFieldWidth"
+                                 requiredMessage=""
+                                 validatorMessage="Imię: minimalna długość to 3 znaki">
+                        <p:keyFilter regEx="/[A-Zęóąśłżźćń]/i"/>
+                        <f:validateLength minimum="3"/>
+                    </p:inputText>
+
+                    <ui:remove><!--Nazwisko--></ui:remove>
+                    <p:outputLabel for="lastName"
+                                   value="Nazwisko:"/>
+                    <p:inputText id="lastName"
+                                 value="#{employeeListPageService.lastName}"
+                                 label="firstName"
+                                 required="true"
+                                 maxlength="100"
+                                 styleClass="inputFieldWidth"
+                                 validatorMessage="Nazwisko: minimalna długość to 3 znaki"
+                                 requiredMessage="">
+                        <p:keyFilter regEx="/[A-Zęóąśłżźćń]/i"/>
+                        <f:validateLength minimum="3"/>
+                    </p:inputText>
+
+                    <ui:remove><!--Data zatrudnienia--></ui:remove>
+                    <p:outputLabel for="employmentDate"
+                                   value="Data zatrudnienia:"/>
+                    <p:calendar id="employmentDate"
+                                value="#{employeeListPageService.employmentDate}"
+                                pattern="dd-MM-yyyy"
+                                mask="true"
+                                maxdate="#{employeeListPageService.getTodayDate()}"
+                                locale="pl"
+                                inputStyleClass="inputFieldWidth"
+                                required="true"
+                                navigator="true"
+                                yearRange="c-50:c"
+                    />
+
+                    <ui:remove><!--Data urodzenia--></ui:remove>
+                    <p:outputLabel for="birthDate"
+                                   value="Data urodzenia:"/>
+                    <p:calendar id="birthDate"
+                                value="#{employeeListPageService.birthDate}"
+                                pattern="dd-MM-yyyy"
+                                mask="true"
+                                maxdate="#{employeeListPageService.getTodayDate()}"
+                                locale="pl"
+                                inputStyleClass="inputFieldWidth"
+                                required="true"
+                                navigator="true"
+                                yearRange="c-100:c"
+                    />
+
+                    <ui:remove><!--Ukończona szkoła--></ui:remove>
+                    <p:outputLabel for="completedStudies"
+                                   value="Ukończona szkoła:"/>
+                    <p:selectOneMenu id="completedStudies"
+                                     required="true"
+                                     effectSpeed="10"
+                                     value="#{employeeListPageService.completedStudies}"
+                                     style="width: 290px">
+                        <f:selectItem itemLabel="Wybierz..." itemValue="#{null}"/>
+                        <f:selectItems value="#{employeeListPageService.getAllCompletedStudiesList()}"/>
+                    </p:selectOneMenu>
+
+                    <ui:remove><!--Zgoda na nadgodziny--></ui:remove>
+                    <p:outputLabel for="overtimeAgreement"
+                                   value="Zgoda na nadgodziny:"/>
+                    <p:selectBooleanCheckbox id="overtimeAgreement"
+                                             value="#{employeeListPageService.overtimeAgreement}"/>
+                </h:panelGrid>
+
+                <ui:remove><!--DIV z przyciskami do dodania zakresu dat pracy--></ui:remove>
+                <div class="addNewWorkScopeDiv">
+                    Poprzednie okresy zatrudnienia (poza czasem nauki):
+                    <p:commandLink action="#{employeeListPageService.setVisibilityInputWorksScopesDates}"
+                                   update="newEmployeeForm"
+                                   immediate="true"
+                                   disabled="#{employeeListPageService.showInputWorksScopesDates}">
+                        <p:graphicImage value="/resources/images/icons/add.png" width="3%"
+                                        style="vertical-align: middle; margin-left: 10px"
+                                        title="Dodaj nowy zakres"/>
+                    </p:commandLink>
+
+                    <p:commandLink action="#{employeeListPageService.deleteLastWorksScope}"
+                                   immediate="true"
+                                   update="newEmployeeForm"
+                                   disabled="#{employeeListPageService.isEmptyWorksScopeList()}">
+                        <p:graphicImage value="/resources/images/icons/minus.png" width="3%"
+                                        style="vertical-align: middle; margin-left: 10px"
+                                        title="Usuń ostatni zakres"/>
+                    </p:commandLink>
+                </div>
+
+                <ui:remove><!--Lista aktualnie dodanych zakresów dat--></ui:remove>
+                <p:repeat value="#{employeeListPageService.previousWorksScopes}" var="previousWorkScope">
+                    <h:panelGrid id="previousWorkScopeListPanel" columns="4" cellspacing="10" styleClass="panelGrid">
+
+                        <p:outputLabel for="dateFromWorkscope"
+                                       value="Data od:"/>
+                        <p:outputLabel id="dateFromWorkscope"
+                                       value="#{previousWorkScope.dateFrom}">
+                            <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy"/>
+                        </p:outputLabel>
+
+                        <p:outputLabel for="dateToWorkscope"
+                                       value="Data do:"/>
+                        <p:outputLabel id="dateToWorkscope"
+                                       value="#{previousWorkScope.dateTo}">
+                            <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+
+                </p:repeat>
+
+                <ui:remove><!--Panel z polami datowymi i przyciskami pozwalającymi na zapisanie zakresu--></ui:remove>
+                <h:panelGroup id="panelGroupWorksScopes" style="display: inline-block; text-align: center;"
+                              rendered="#{employeeListPageService.showInputWorksScopesDates}">
+                    <h:panelGrid id="previousWorkScopePanel"
+                                 columns="4" cellspacing="10" style="display: inline-block; vertical-align: middle;">
+                        <p:outputLabel for="dateFrom" value="Data od:"/>
+                        <p:calendar id="dateFrom"
+                                    value="#{employeeListPageService.dateFromWorksScope}"
+                                    showOn="button"
+                                    inputStyleClass="workScopeDateWidth"
+                                    required="true"
+                                    pattern="dd-MM-yyyy"
+                                    maxdate="#{employeeListPageService.getTodayDate()}"
+                                    mask="true"
+                                    locale="pl"
+                                    navigator="true"
+                                    yearRange="c-100:c">
+                            <p:ajax event="dateSelect" update="dateTo"/>
+                        </p:calendar>
+
+                        <p:outputLabel for="dateTo" value="Data do:"/>
+                        <p:calendar id="dateTo"
+                                    value="#{employeeListPageService.dateToWorksScope}"
+                                    showOn="button"
+                                    disabled="#{employeeListPageService.dateFromWorksScope == null}"
+                                    inputStyleClass="workScopeDateWidth"
+                                    required="true"
+                                    pattern="dd-MM-yyyy"
+                                    mindate="#{employeeListPageService.dateFromWorksScope}"
+                                    maxdate="#{employeeListPageService.getTodayDate()}"
+                                    mask="true"
+                                    locale="pl"
+                                    navigator="true"
+                                    yearRange="c-100:c"
+                        />
+                    </h:panelGrid>
+
+                    <p:commandLink action="#{employeeListPageService.saveNewWorksScope}"
+                                   update="newEmployeeForm">
+                        <p:graphicImage value="/resources/images/icons/confirm.png" width="3%"
+                                        title="Dodaj"
+                                        style=" vertical-align: middle;"/>
+                    </p:commandLink>
+                    <p:commandLink action="#{employeeListPageService.disableInputWorksScopesDates}"
+                                   immediate="true"
+                                   update="newEmployeeForm">
+                        <p:graphicImage value="/resources/images/icons/cancel.png" width="3%"
+                                        title="Anuluj"
+                                        style=" vertical-align: middle; margin-left: 10px"/>
+                    </p:commandLink>
+                </h:panelGroup>
+
+                <ui:remove><!--Wiadomości walidatorów--></ui:remove>
+                <h:message for="firstName" styleClass="messageError" style="margin-top:15px;"/>
+                <h:message for="lastName" styleClass="messageError"/>
+
+                <ui:remove><!--Potwierdzenie wprowadzonych danych--></ui:remove>
+                <div class="centerDataDiv">
+                    <p:outputLabel for="validData" value="Potwierdzam poprawność wprowadzonych danych:"
+                                   styleClass="validDataCheckbox"/>
+                    <p:selectBooleanCheckbox id="validData" value="#{employeeListPageService.validData}">
+                        <p:ajax event="change" update="saveButton"/>
+                    </p:selectBooleanCheckbox>
+                </div>
+
+                <ui:remove><!--Przycisk zapisujący pracownika--></ui:remove>
+                <p:commandButton value="Zapisz pracownika" styleClass="commandButton" id="saveButton"
+                                 disabled="#{not employeeListPageService.validData}"
+                                 action="#{employeeListPageService.saveEmployee}" update="tableForm, newEmployeeForm">
+                    <f:ajax execute="@all" render="@form"/>
+                </p:commandButton>
+
+            </p:fieldset>
+        </h:form>
+
+
+        <ui:remove><!--Lista pracowników--></ui:remove>
+        <p:fieldset legend="Lista zatrudnionych pracowników" toggleable="true" toggleSpeed="500"
+                    styleClass="fieldset-center-none-background" style="margin-bottom: 30px">
+
+            <h:form id="tableForm">
+                <p:dataTable id="table" var="employee" value="#{employeeListPageService.getAllEmployees()}"
+                             paginator="true"
+                             paginatorPosition="bottom" rowsPerPageTemplate="10,20,50" rows="10"
+                             emptyMessage="Brak pracowników..."
+                             styleClass="employeeTableStyle">
+                    <p:column headerText="ID" style="color: black; width: 15%" sortBy="#{employee.uniqueEmployeeId}">
+                        <h:outputText value="#{employee.uniqueEmployeeId}"/>
+                    </p:column>
+                    <p:column headerText="Imię" style="color: black" sortBy="#{employee.firstName}">
+                        <h:outputText value="#{employee.firstName}"/>
+                    </p:column>
+                    <p:column headerText="Nazwisko" style="color: black" sortBy="#{employee.lastName}">
+                        <h:outputText value="#{employee.lastName}"/>
+                    </p:column>
+                    <p:column headerText="Urlop (#{employeeListPageService.getActualYear()})" style="color: black" sortBy="#{employee.lastName}">
+                        <h:outputText value="Dni do wybrania: #{employeeListPageService.calculateAvailableVacation(employee.id)}"/>
+                    </p:column>
+                    <p:column headerText="Nadgodziny" style="color: black; width: 15%"
+                              sortBy="#{employee.overtimeAgreement}">
+                        <h:outputText value="#{employee.overtimeAgreement ? 'Tak' : 'Nie'}"/>
+                    </p:column>
+                    <p:column headerText="Akcje" style="color: black; width: 15%; text-align: center;">
+                        <ui:remove><!--Przycisk do edycji pracownika--></ui:remove>
+                        <p:link outcome="editEmployeePage.xhtml">
+                            <f:param name="employeeId" value="#{employee.id}"/>
+                            <p:graphicImage value="/resources/images/icons/edit.png" width="20%"
+                                            style="margin-right: 20px" title="Szczegóły"/>
+                        </p:link>
+
+                        <ui:remove><!--Przycisk do usunięcia pracownika--></ui:remove>
+                        <p:commandLink action="#{employeeListPageService.deleteEmployee(employee.id)}"
+                                       update="growlDelete, tableForm">
+                            <p:confirm header="Potwierdzenie usunięcia"
+                                       message="Czy na pewno chcesz usunąć: #{employee.firstName} #{employee.lastName}"/>
+                            <p:graphicImage value="/resources/images/icons/delete.png" width="20%" title="Usuń"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+                <h5>Liczba zarejestrowanych pracowników: #{employeeListPageService.listSize}</h5>
+            </h:form>
+        </p:fieldset>
+
+    </ui:define>
+
+</ui:composition>

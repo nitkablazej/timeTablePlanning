@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="body">
+
+        <h3 style="margin-top: 80px">Projekt zrealizowano w ramach pracy inżynierskiej pt.</h3>
+        <p:separator style="width: 30%"/>
+        <h2>Aplikacja do planowania harmonogramu pracy</h2>
+        <p:separator style="width: 30%"/>
+        <h3>Kierujący pracą: dr inż. Rafał Kozik</h3>
+        <h3>Pracę wykonał: Błażej Nitka</h3>
+
+        <p:graphicImage value="/resources/images/utp.png" styleClass="centerElement" width="20%"/>
+
+        <h3>Aplikacja umożliwia:</h3>
+        <h4>- Rejestrację nowego pracownika w systemie,<br/><br/>
+            - Zapisanie przepracowanych okresów przed rejestracją,<br/><br/>
+            - Edycję danych pracownika,<br/><br/>
+            - Zarządzanie urlopem pracownika,<br/><br/>
+            - Zarządzanie listą pracowników (modyfikacja / usuwanie),<br/><br/>
+            - Generowanie harmonogramu pracy z uwzględnieniem zaplanowanych urlopów,<br/><br/>
+            - Generowanie jedno lub dwuzmianowego harmonogramu pracy ze zmianami równymi 8 godzin,<br/><br/>
+            - Parametryzację harmonogramu (pracujące weekendy / święta),<br/><br/>
+            - Przeglądanie przepracowanych przez pracownika godzin w miesiącu,<br/><br/>
+            - Przeglądanie wcześniej wygenerowanych harmonogramów.<br/><br/>
+        </h4>
+
+        <h3 style="margin-top: 50px">Zapisy i fragmenty Kodeksu Pracy oraz innych przepisów zaimplementowane w aplikacji:</h3>
+        <h4>- Ukończona szkoła zawodowa / średnia / wyższa gwarantuje określoną liczbę lat wliczanych do stażu pracy,<br/><br/>
+            - Podczas jednoczesnego zatrudnienia i pobierania nauki staż pracy nie kumuluje się (uwzględniany jest tylko jeden z nachodzących się okresów),<br/><br/>
+            - Podczas jednoczesnego zatrudnienia w kilku miejscach pracy staż pracy nie kumuluje się,<br/><br/>
+            - Przed przepracowaniem 10 lat pracownikowi przysługuje 20 dni urlopowych,<br/><br/>
+            - Po przepracowaniu 10 lat pracownikowi przysługuje 26 dni urlopowych,<br/><br/>
+            - Średni tygodniowy czas pracy powinien wynosić 40 godzin, natomiast z nadgodzinami nie więcej niż 48 godzin,<br/><br/>
+            - Pracownikowi przysługuje conajmniej 11 godzin przerwy pomiędzy zakończeniem a rozpoczęciem nowego dnia pracy.<br/><br/>
+        </h4>
+
+    </ui:define>
+
+</ui:composition>

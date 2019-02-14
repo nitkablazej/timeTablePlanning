@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="body">
+
+        <ui:remove><!--Tytuł widoku--></ui:remove>
+        <h2>Lista wygenerowanych harmonogramów</h2>
+
+        <h:form id="timeTableFileForm">
+            <p:dataTable id="table" var="file" value="#{timeTableListPageService.getAllFiles()}"
+                         paginator="true"
+                         paginatorPosition="bottom" rowsPerPageTemplate="10,20,50" rows="10"
+                         emptyMessage="Brak harmonogramów..."
+                         styleClass="employeeTableStyle"
+                         style="width: 70%; margin-top: 40px">
+                <p:column headerText="Nazwa pliku" filterBy="#{file.name}"
+                          filterMatchMode="contains" style="color: black; text-align: center" sortBy="#{file.name}">
+                    <h:outputText value="#{file.name}"/>
+                </p:column>
+                <p:column headerText="Zmiany" style="color: black; text-align: center" width="10%" sortBy="#{file.oneChanges}">
+                    <h:outputText value="#{file.oneChanges ? '1' : '2'}"/>
+                </p:column>
+                <p:column headerText="Data wygenerowania" style="color: black; text-align: center;" width="25%"
+                          sortBy="#{file.generatedDate}">
+                    <h:outputText value="#{file.generatedDate}">
+                        <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy HH:mm:ss"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Akcje" style="color: black; text-align: center;" width="13%">
+                    <ui:remove><!--Przycisk do pobrania grafiku--></ui:remove>
+                    <p:commandLink id="downloadFile"
+                                   ajax="false"
+                                   style="color: black; margin-right: 5px;">
+                        <p:fileDownload value="#{timeTableListPageService.downloadFile(file.id)}"/>
+                        <p:graphicImage value="/resources/images/icons/download.png" width="25%" title="Pobierz"/>
+                    </p:commandLink>
+
+                    <ui:remove><!--Przycisk do usunięcia harmonogramu--></ui:remove>
+                    <p:commandLink action="#{timeTableListPageService.deleteFile(file.id)}"
+                                   update="growlDelete, timeTableFileForm"
+                                   style="color: black; margin-left: 5px;">
+                        <p:confirm header="Potwierdzenie usunięcia"
+                                   message="Czy na pewno chcesz usunąć harmonogram: #{file.name}?"/>
+                        <p:graphicImage value="/resources/images/icons/delete.png" width="25%" title="Usuń"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <ui:remove><!--Okno potwierdzające usunięcie harmonogramu--></ui:remove>
+        <p:growl id="growlDelete" showDetail="true"/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no"/>
+            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes"/>
+        </p:confirmDialog>
+
+    </ui:define>
+
+</ui:composition>

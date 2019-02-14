@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Aplikacja do planowania harmonogramu pracy</title>
+    <link rel="icon" type="image/png"  href="#{resource['images/icons/planning.png']}" />
+</h:head>
+
+<h:body id="body">
+    <h:outputStylesheet library="css" name="stylesheet.css"/>
+    <h:outputScript library="js" name="script.js"/>
+
+    <p:menubar id="menuBar">
+
+        <p:menuitem value="PRACOWNICY" outcome="employeeListPage" style="border-left: 1px solid darkgray"/>
+
+        <p:submenu label="HARMONOGRAM">
+            <p:menuitem value="UTWÓRZ GRAFIK" outcome="timeTableGeneratePage"/>
+            <p:separator/>
+            <p:menuitem value="LISTA GRAFIKÓW" outcome="timeTableListPage"/>
+        </p:submenu>
+
+        <p:menuitem value="INFORMACJE" outcome="informationPage"/>
+
+    </p:menubar>
+
+    <ui:insert name="body"/>
+</h:body>
+</html>

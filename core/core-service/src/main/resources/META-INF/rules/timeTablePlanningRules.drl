@@ -1,0 +1,24 @@
+package rules;
+ 
+import pl.nitka.blazej.entity.employee.Employee;
+
+global java.lang.String companyPrefix;
+global org.apache.log4j.Logger logger;
+
+rule "First employee work"
+	when 
+		employee: Employee(previousWorkScopes == 0)
+	then
+    	logger.info("Rule name: " + drools.getRule().getName());
+		employee.setFirstWork(true);
+		employee.setUniqueEmployeeId(String.format("%s_%sF", companyPrefix, employee.getId()));
+	end
+
+rule "Next employee work"
+	when
+		employee: Employee(previousWorkScopes > 0)
+	then
+		logger.info("Rule name: " + drools.getRule().getName());
+		employee.setFirstWork(false);
+		employee.setUniqueEmployeeId(String.format("%s_%sN", companyPrefix, employee.getId()));
+	end

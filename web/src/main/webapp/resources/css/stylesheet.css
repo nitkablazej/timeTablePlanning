@@ -1,0 +1,263 @@
+/* Czcionka w projekcie */
+.ui-widget {
+    font-family: Calibri, sans-serif;
+    font-size: 20px;
+}
+
+h2, h3, h4, h5 {
+    text-align: center;
+    font-family: Calibri, sans-serif;
+    display: block;
+    color: black;
+}
+
+/* Tło strony */
+body {
+    background: url("#{resource['images/background.jpg']}") center center fixed;
+    background-size: cover;
+}
+
+/* Pasek menu */
+.ui-menubar {
+    margin: 40px 50px 60px;
+    text-align: center;
+    border: 2px solid;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px rgba(12, 28, 64, .5);
+}
+
+/* Centrowanie elementów menu */
+.ui-menu-list {
+    display: inline-block;
+}
+
+/* Wyśrodkowanie tekstu w menu */
+.ui-menu .ui-menuitem-text {
+    float: unset;
+    color: black;
+}
+
+/* Szerokość elementów w menu, padding */
+.ui-menubar .ui-menuitem-link {
+    width: 230px;
+    padding: .7em .3em;
+    border-right: solid 1px darkgray;
+}
+
+/* Elementy podmenu */
+.ui-menubar .ui-menu-child .ui-menuitem-link {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: none;
+}
+
+/* Wyśrodkowanie Panel Grid */
+.panelGrid {
+    margin: auto auto;
+}
+
+/* Czcionka w etykietach */
+.ui-outputlabel.ui-widget {
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+/* Czcionka w polach tekstowych */
+.ui-widget-content .ui-inputfield {
+    font-family: "Times New Roman", sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+/* Zaznaczenie etykiety na czerwono w błędnej walidacji */
+.ui-outputlabel.ui-state-error {
+    color: red;
+    background: none;
+}
+
+/* Czcionka w liście rozwijanej */
+.ui-selectonemenu-panel .ui-selectonemenu-list {
+    font-family: Calibri, sans-serif;
+    font-size: 16px;
+    color: black;
+}
+
+/* Czcionka w switchach */
+.ui-inputswitch .ui-inputswitch-off, .ui-inputswitch .ui-inputswitch-on span {
+    font-family: Calibri, sans-serif;
+    font-weight: normal;
+    font-size: 18px;
+    color: black;
+}
+
+/* Wyśrodkowanie przycisku */
+.commandButton {
+    margin: 15px auto;
+    display: block;
+}
+
+/* Czcionka przycisku */
+.ui-button-text-only .ui-button-text {
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+/* Właściwośi dla rozwijanego panelu */
+.fieldset-center-none-background {
+    margin: 30px auto 0;
+    background: none;
+    width: 70%;
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+}
+
+/* Kolor tekstu w panelu rozwijanym */
+.ui-fieldset-toggleable .ui-fieldset-legend {
+    color: black;
+}
+
+/* Styl komunikatu o błędzie walidacji */
+.messageError {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: red
+}
+
+/* Nagłówki tabel */
+.ui-datatable thead th, .ui-datatable tfoot td, .ui-datatable tbody td {
+    color: black;
+}
+
+/* Tabela z pracownikami */
+.employeeTableStyle {
+    border-color: gray;
+    margin: 20px auto 40px;
+    display: block;
+    color: black;
+}
+
+/* Stopka tabeli */
+.ui-paginator.ui-paginator-bottom.ui-widget-header.ui-corner-bottom {
+    color: black;
+    font-size: 12px;
+    font-family: Arial, serif;
+}
+
+/* Nagłówek okna dialogowego */
+.ui-dialog-title {
+    font-size: 18px;
+}
+
+/* Ikona w oknie modalnym */
+.ui-icon.ui-confirm-dialog-severity {
+    background: none;
+}
+
+/* Tekst w oknie modalnym */
+.ui-confirm-dialog-message {
+    font-size: 18px;
+}
+
+/* Przyciski w oknie modalnym */
+.ui-dialog .ui-dialog-buttonpane {
+    text-align: center;
+}
+
+/* Tekst w kalendarzu z możliwością wyboru */
+.ui-datepicker-title {
+    font-size: 16px;
+    font-family: Calibri, sans-serif;
+}
+
+/* Kontener z etykietą i checkboxem zaznaczającym prawidłowo wprowadzone dane */
+.centerDataDiv {
+    text-align: center;
+    margin-top: 35px
+}
+
+/* Checkbox do zaznaczenia poprawności wprowadzonych danych */
+.validDataCheckbox {
+    font-size: 16px;
+    margin-right: 15px
+}
+
+/* Szerokość pola datowego do zakresu dat poprzednich prac */
+.workScopeDateWidth {
+    width: 150px;
+}
+
+/* Szerokość pola oczekującego na wartość */
+.inputFieldWidth {
+    width: 310px;
+}
+
+/* Div z tytułem i przyciskiem do dodania nowego zakresu pracy */
+.addNewWorkScopeDiv {
+    margin-top: 30px;
+    vertical-align: middle;
+    text-align: center;
+    color: black;
+}
+
+/* Pusta wiadomość w tabeli */
+.ui-widget-content.ui-datatable-empty-message {
+    text-align: center;
+}
+
+/* Tekst w wiadomości z błędem i informacją */
+.ui-messages-error .ui-corner-all .ui-messages-info .ui-corner-all{
+    text-align: center;
+    display: block;
+}
+
+/* Przezroczystość growla */
+.ui-growl-item-container {
+    opacity: 1;
+}
+
+/* Wysokość kontrolki w menu wielokrotnego wyboru */
+.ui-selectcheckboxmenu-multiple-container.ui-inputfield {
+    min-height: 30px;
+}
+
+/* Wyłączenie checkboxa zaznaczającego wszystkie elementy w liście checkboxów */
+.ui-selectcheckboxmenu-header {
+    display: none;
+}
+
+/* Szerokość rozwiniętej listy checkboxów */
+.ui-selectcheckboxmenu-panel.ui-selectcheckboxmenu-items-wrapper {
+    min-height: 290px;
+}
+
+/* Minimalna długość pustej listy wielokrotnego wyboru */
+.ui-selectcheckboxmenu-panel.ui-widget.ui-widget-content.ui-corner-all.ui-helper-hidden.ui-input-overlay {
+    min-width: 290px;
+}
+
+/* Wyśrodkowanie panelu do pobrania harmonogramu */
+.panelGroup {
+    margin-top: 40px;
+    text-align: center;
+    display: block;
+}
+
+/* Odstęp nad i pod polem do filtrów */
+.ui-datatable .ui-column-filter {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Wyśrodkowanie tekstu w message */
+.ui-messages-info, .ui-message-info, .ui-messages-error, .ui-message-error {
+    text-align: center;
+}
+
+/* Wycentrowanie elementu */
+.centerElement {
+    display: block;
+    margin: 50px auto;
+}

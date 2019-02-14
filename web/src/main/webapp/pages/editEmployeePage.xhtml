@@ -1,0 +1,357 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="body">
+
+        <ui:remove><!--ID pracownika--></ui:remove>
+        <f:metadata>
+            <f:viewParam name="employeeId" value="#{editEmployeePageService.employeeId}"/>
+        </f:metadata>
+
+        <h:form id="editEmployeeForm">
+
+            <ui:remove><!--Tytuł widoku--></ui:remove>
+            <h2>Panel szczegółów pracownika: #{editEmployeePageService.editedEmployee.firstName} #{editEmployeePageService.editedEmployee.lastName} (ID: #{editEmployeePageService.editedEmployee.uniqueEmployeeId})</h2>
+
+            <p:fieldset id="employeeDetailsFieldSet" legend="Dane pracownika" toggleable="true" toggleSpeed="500"
+                        styleClass="fieldset-center-none-background">
+
+
+                <h:panelGrid columns="2" cellpadding="5" styleClass="panelGrid">
+
+                    <ui:remove><!--Czas przepracowany przed rejestracją--></ui:remove>
+                    <p:outputLabel for="preWorkedTime"
+                                   value="Przepracowany okres przed rejestracją w systemie:"/>
+                    <p:outputLabel id="preWorkedTime"
+                                   value="#{editEmployeePageService.editedEmployee.workTime.textWorkedTimeBeforeEmployment}"/>
+
+                    <ui:remove><!--Data, od której przysługuje 26 dni urlopu--></ui:remove>
+                    <p:outputLabel for="fullVacationDateExist"
+                                   value="Data, od której przysługuje 26 dni urlopu:"
+                                   rendered="#{not editEmployeePageService.fullVacationBeforeEmployment()}"/>
+                    <p:outputLabel id="fullVacationDateExist"
+                                   value="#{editEmployeePageService.editedEmployee.fullVacationDate}"
+                                   rendered="#{not editEmployeePageService.fullVacationBeforeEmployment()}"/>
+
+                    <ui:remove><!--Data, od której przysługuje 26 dni urlopu (data nie istnieje = czas już osiągnięto)--></ui:remove>
+                    <p:outputLabel for="fullVacationDateExist"
+                                   value="Data, od której przysługuje 26 dni urlopu:"
+                                   rendered="#{editEmployeePageService.fullVacationBeforeEmployment()}"/>
+                    <p:outputLabel id="fullVacationDateNotExist"
+                                   value="26 dni urlopu już osiągnięto"
+                                   rendered="#{editEmployeePageService.fullVacationBeforeEmployment()}"/>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" cellpadding="5" styleClass="panelGrid" style="margin-top: 30px">
+
+                    <ui:remove><!--Data zatrudnienia--></ui:remove>
+                    <p:outputLabel for="employmentDate"
+                                   value="Data zatrudnienia:"/>
+                    <p:outputLabel id="employmentDate"
+                                   value="#{editEmployeePageService.editedEmployee.employmentDate}"/>
+
+                    <ui:remove><!--Staż w firmie--></ui:remove>
+                    <p:outputLabel for="timeInCompany"
+                                   value="Staż w firmie:"/>
+                    <p:outputLabel id="timeInCompany"
+                                   value="#{editEmployeePageService.editedEmployee.timeInCompany}"/>
+
+                    <ui:remove><!--Pierwsza praca--></ui:remove>
+                    <p:outputLabel for="firstWork"
+                                   value="Pierwsza praca:"/>
+                    <p:outputLabel id="firstWork"
+                                   value="#{editEmployeePageService.editedEmployee.firstWork ? 'Tak' : 'Nie'}"/>
+
+                    <ui:remove><!--Imię (wyświetlanie)--></ui:remove>
+                    <p:outputLabel for="firstNameShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="Imię:"/>
+                    <p:outputLabel id="firstNameShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="#{editEmployeePageService.editedEmployee.firstName}"/>
+
+                    <ui:remove><!--Imię (edycja)--></ui:remove>
+                    <p:outputLabel for="firstNameEdit"
+                                   rendered="#{editEmployeePageService.editMode}"
+                                   value="Imię:"/>
+                    <p:inputText id="firstNameEdit"
+                                 value="#{editEmployeePageService.editedEmployee.firstName}"
+                                 required="true"
+                                 rendered="#{editEmployeePageService.editMode}">
+                        <p:keyFilter regEx="/[A-Zęóąśłżźćń]/i"/>
+                        <f:validateLength minimum="3"/>
+                    </p:inputText>
+
+                    <ui:remove><!-- Nazwisko (wyświetlanie)--></ui:remove>
+                    <p:outputLabel for="lastNameShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="Nazwisko:"/>
+                    <p:outputLabel id="lastNameShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="#{editEmployeePageService.editedEmployee.lastName}"/>
+
+                    <ui:remove><!--Nazwisko (edycja)--></ui:remove>
+                    <p:outputLabel for="lastNameEdit"
+                                   rendered="#{editEmployeePageService.editMode}"
+                                   value="Nazwisko:"/>
+                    <p:inputText id="lastNameEdit"
+                                 value="#{editEmployeePageService.editedEmployee.lastName}"
+                                 required="true"
+                                 rendered="#{editEmployeePageService.editMode}">
+                        <p:keyFilter regEx="/[A-Zęóąśłżźćń]/i"/>
+                        <f:validateLength minimum="3"/>
+                    </p:inputText>
+
+                    <ui:remove><!-- Identyfikator (wyświetlanie)--></ui:remove>
+                    <p:outputLabel for="systemIdShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="Identyfikator:"/>
+                    <p:outputLabel id="systemIdShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="#{editEmployeePageService.editedEmployee.uniqueEmployeeId}"/>
+
+                    <ui:remove><!--Identyfikator (edycja)--></ui:remove>
+                    <p:outputLabel for="systemIdEdit"
+                                   rendered="#{editEmployeePageService.editMode}"
+                                   value="Identyfikator:"/>
+                    <p:inputText id="systemIdEdit"
+                                 value="#{editEmployeePageService.editedEmployee.uniqueEmployeeId}"
+                                 required="true"
+                                 rendered="#{editEmployeePageService.editMode}">
+                        <p:keyFilter regEx="/[A-Zęóąśłżźćń_0-9]/i"/>
+                        <f:validateLength minimum="3"/>
+                    </p:inputText>
+
+                    <ui:remove><!--Data urodzenia (wyświetlanie)--></ui:remove>
+                    <p:outputLabel for="birthDateShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="Data urodzenia:"/>
+                    <p:outputLabel id="birthDateShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="#{editEmployeePageService.editedEmployee.birthDate}">
+                        <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy"/>
+                    </p:outputLabel>
+
+                    <ui:remove><!--Data urodzenia (edycja)--></ui:remove>
+                    <p:outputLabel for="birthDateEdit"
+                                   rendered="#{editEmployeePageService.editMode}"
+                                   value="Data urodzenia:"/>
+                    <p:calendar id="birthDateEdit"
+                                value="#{editEmployeePageService.editedEmployee.birthDate}"
+                                rendered="#{editEmployeePageService.editMode}"
+                                pattern="dd-MM-yyyy"
+                                mask="true"
+                                locale="pl"
+                                required="true"
+                                navigator="true"
+                                yearRange="c-100:c"
+                    />
+
+                    <ui:remove><!--Zgoda na nadgodziny (wyświetlenie)--></ui:remove>
+                    <p:outputLabel for="overtimeAgreementShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="Zgoda na nadgodziny:"/>
+                    <p:outputLabel id="overtimeAgreementShow"
+                                   rendered="#{not editEmployeePageService.editMode}"
+                                   value="#{editEmployeePageService.editedEmployee.overtimeAgreement ? 'Tak' : 'Nie'}"/>
+
+                    <ui:remove><!--Zgoda na nadgodziny (edycja)--></ui:remove>
+                    <p:outputLabel for="overtimeAgreementEdit"
+                                   rendered="#{editEmployeePageService.editMode}"
+                                   value="Zgoda na nadgodziny:"/>
+                    <p:selectBooleanCheckbox id="overtimeAgreementEdit"
+                                             rendered="#{editEmployeePageService.editMode}"
+                                             value="#{editEmployeePageService.editedEmployee.overtimeAgreement}"/>
+                </h:panelGrid>
+
+                <div id="buttons" class="centerDataDiv">
+                    <ui:remove><!--Włącz tryb edycji--></ui:remove>
+                    <p:commandButton
+                            id="turnOnEditModeButton"
+                            value="Tryb edycji"
+                            action="#{editEmployeePageService.turnOnEditMode}"
+                            rendered="#{not editEmployeePageService.editMode}"
+                            update="@form"
+                    />
+
+                    <ui:remove><!--Zapisz zmiany--></ui:remove>
+                    <p:commandButton
+                            id="saveChangesButton"
+                            value="Zapisz zmiany"
+                            action="#{editEmployeePageService.saveChanges}"
+                            rendered="#{editEmployeePageService.editMode}"
+                            style="margin-right: 10px"
+                            update="@form, growlConfirm">
+                        <p:confirm header="Potwierdzenie edycji"
+                                   disabled="#{editEmployeePageService.duplicatedVacation}"
+                                   message="Czy na pewno chcesz zapisać zmiany?"/>
+                    </p:commandButton>
+
+                    <ui:remove><!--Anuluj tryb edycji--></ui:remove>
+                    <p:commandButton
+                            id="turnOffEditModeButton"
+                            value="Anuluj"
+                            action="#{editEmployeePageService.turnOffEditMode}"
+                            rendered="#{editEmployeePageService.editMode}"
+                            update="@form"
+                            immediate="true"
+                            style="margin-left: 10px"
+                    />
+
+                </div>
+
+            </p:fieldset>
+        </h:form>
+
+        <p:fieldset id="employeeVacations" collapsed="true" legend="Zaplanowane urlopy" toggleable="true"
+                    toggleSpeed="500"
+                    styleClass="fieldset-center-none-background" style="margin-bottom: 30px">
+
+            <h:form id="vacationsEmployeeForm">
+
+                <p:messages id="messages" showIcon="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <h:panelGrid id="newVacationPanelGrid" columns="5" cellspacing="10" styleClass="panelGrid">
+                    <p:outputLabel for="dateFromVacation" value="Data od:"/>
+                    <p:calendar id="dateFromVacation"
+                                value="#{editEmployeePageService.dateFromVacation}"
+                                showOn="button"
+                                inputStyleClass="workScopeDateWidth"
+                                required="true"
+                                pattern="dd-MM-yyyy"
+                                mask="true"
+                                mindate="#{editEmployeePageService.minVacationDate()}"
+                                maxdate="#{editEmployeePageService.maxVacationDate()}"
+                                placeholder="Początek urlopu"
+                                requiredMessage="Data rozpoczęcia urlopu - wartość jest wymagana"
+                                locale="pl">
+                        <p:ajax event="dateSelect" update="dateToVacation"/>
+                    </p:calendar>
+
+                    <p:outputLabel for="dateToVacation" value="Data do:"/>
+                    <p:calendar id="dateToVacation"
+                                value="#{editEmployeePageService.dateToVacation}"
+                                showOn="button"
+                                disabled="#{editEmployeePageService.dateFromVacation == null}"
+                                inputStyleClass="workScopeDateWidth"
+                                required="true"
+                                requiredMessage="Data zakończenia urlopu - wartość jest wymagana"
+                                mindate="#{editEmployeePageService.dateFromVacation}"
+                                placeholder="Koniec urlopu"
+                                maxdate="#{editEmployeePageService.maxVacationDate()}"
+                                pattern="dd-MM-yyyy"
+                                mask="true"
+                                locale="pl">
+                        <p:ajax event="dateSelect"
+                                listener="#{editEmployeePageService.checkIfOtherEmployeeHasThisVacation}"
+                                update="@form"/>
+                    </p:calendar>
+
+                    <ui:remove><!--Dodaj urlop--></ui:remove>
+                    <p:commandButton
+                            id="addVacationButton"
+                            value="Dodaj urlop"
+                            action="#{editEmployeePageService.addVacation}"
+                            style="margin-right: 10px"
+                            update="@form, growlDuplicatedVacation">
+                        <p:confirm header="Nakładające się urlopy"
+                                   disabled="#{not editEmployeePageService.duplicatedVacation}"
+                                   message="Urlop któregoś z pracowników pokrywa się z danym zakresem urlopowym. Czy zapisać mimo to?"/>
+                    </p:commandButton>
+                </h:panelGrid>
+
+                <p:dataTable id="vacationTable"
+                             var="vacation"
+                             value="#{editEmployeePageService.vacationList}"
+                             emptyMessage="Brak zaplanowanych urlopów..."
+                             paginator="true"
+                             paginatorPosition="bottom" rowsPerPageTemplate="10,20,50" rows="10"
+                             styleClass="employeeTableStyle"
+                             style="width: 80%">
+                    <p:column headerText="Data od" style="color: black">
+                        <h:outputText value="#{vacation.dateFromVacation}">
+                            <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Data do" style="color: black">
+                        <h:outputText value="#{vacation.dateToVacation}">
+                            <f:convertDateTime timeZone="Europe/Warsaw" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Wykorzystane dni" style="color: black">
+                        <h:outputText value="#{vacation.workingDaysInVacation}"/>
+                    </p:column>
+                    <p:column headerText="Akcje" style="color: black; text-align: center;" width="15%">
+
+                        <p:commandLink action="#{editEmployeePageService.cancelVacation(vacation.id)}" immediate="true"
+                                       update="growlCancel, vacationsEmployeeForm"
+                                       disabled="#{editEmployeePageService.vacationIsBlocked(vacation.id)}">
+                            <p:graphicImage value="/resources/images/icons/delete.png" width="25%" title="Usuń"/>
+                            <p:confirm header="Potwierdzenie anulowania urlopu"
+                                       message="Czy na pewno chcesz anulować urlop od #{vacation.dateFromVacation} do #{vacation.dateToVacation}?"/>
+                        </p:commandLink>
+
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGrid columns="2" cellpadding="5" styleClass="panelGrid">
+
+                    <ui:remove><!--Urlop do wykorzystania na bieżący rok--></ui:remove>
+                    <p:outputLabel for="thisYearVacation"
+                                   value="Dni urlopu do wykorzystania w bieżącym roku:"/>
+                    <p:outputLabel id="thisYearVacation"
+                                   value="#{editEmployeePageService.thisYearAvailableVacation} (wykorzystano: #{editEmployeePageService.thisYearUsedVacation})"/>
+
+                    <ui:remove><!--Urlop do wykorzystania na nadchodzący rok--></ui:remove>
+                    <p:outputLabel for="nextYearVacation"
+                                   value="Dni urlopu do wykorzystania w kolejnym roku:"/>
+                    <p:outputLabel id="nextYearVacation"
+                                   value="#{editEmployeePageService.nextYearAvailableVacation} (wykorzystano: #{editEmployeePageService.nextYearUsedVacation})"/>
+                </h:panelGrid>
+
+            </h:form>
+
+        </p:fieldset>
+
+        <ui:remove><!--Powrót--></ui:remove>
+        <p:commandButton
+                id="back"
+                value="Powrót"
+                action="employeeListPage"
+                styleClass="commandButton"
+                style="margin-bottom: 40px"
+        />
+
+        <ui:remove><!--Okno potwierdzające zapisanie zmian--></ui:remove>
+        <p:growl id="growlConfirm" showSummary="false"/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+
+        <ui:remove><!--Okno potwierdzające usunięcie urlopu--></ui:remove>
+        <p:growl id="growlCancel" showDetail="true"/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no"/>
+            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes"/>
+        </p:confirmDialog>
+
+        <ui:remove><!--Okno potwierdzające zapisanie urlopu, pomimo, że inny pracownik ma urlop w którymś z tych dni--></ui:remove>
+        <p:growl id="growlDuplicatedVacation" showSummary="false"/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+
+    </ui:define>
+
+</ui:composition>

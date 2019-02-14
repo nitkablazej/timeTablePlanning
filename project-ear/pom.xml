@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>time-table-planning</artifactId>
+        <groupId>pl.nitka.blazej</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>project-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>pl.nitka.blazej</groupId>
+            <artifactId>core-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.nitka.blazej</groupId>
+            <artifactId>core-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.nitka.blazej</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.nitka.blazej</groupId>
+            <artifactId>timeTablePlanning</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>timeTablePlanning</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.0.1</version>
+
+                <configuration>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <skinnyWars>true</skinnyWars>
+                    <modules>
+                        <webModule>
+                            <groupId>pl.nitka.blazej</groupId>
+                            <artifactId>timeTablePlanning</artifactId>
+                            <bundleFileName>timeTablePlanning.war</bundleFileName>
+                            <contextRoot>/timeTablePlanning</contextRoot>
+                        </webModule>
+                    </modules>
+
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
